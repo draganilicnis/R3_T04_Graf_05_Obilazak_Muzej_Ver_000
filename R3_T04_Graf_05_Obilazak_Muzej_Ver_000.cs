@@ -86,3 +86,6 @@ class R3_T04_Graf_05_Obilazak_Z_Muzej_Ver_000
         }
     }
 }
+
+// https://codeblog.rs/clanci/bfs_i_dfs#uvod
+// https://www.youtube.com/watch?v=84jNzUOY78c
