@@ -53,8 +53,8 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
 
         int brojac_cvorova_poseta_ulaz = 0;             // Brojac cvorova koji su prvi put poseceni
         int brojac_cvorova_poseta_izlaz = 0;            // Brojac cvorova koji su poslednji put poseceni
-        int susednih_1 = 4;                             // Brojac mogucih susednih cvorova koji imaju 1
-        int susednih_2 = 4;                             // Brojac mogucih susednih cvorova koji imaju 2
+        // int susednih_1 = 4;                             // Brojac mogucih susednih cvorova koji imaju 1
+        // int susednih_2 = 4;                             // Brojac mogucih susednih cvorova koji imaju 2
         bool bObilazak_Kraj = false;                    // Obilazak vise nije moguc
 
         while (!bObilazak_Kraj)
@@ -76,7 +76,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                     X = x;
                     Y = y;
                     bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
-                    susednih_1 = 4;
+                    // susednih_1 = 4;
                     break;
                 }
                 else
@@ -91,8 +91,8 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                 if (G[X, Y] == 2)
                 {
                     Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
-                    susednih_1 = 4;
-                    susednih_2 = 4;
+                    // susednih_1 = 4;
+                    // susednih_2 = 4;
                 }
                 bool bCvor_Susedni_stanje_2_Postoji = false;
                 for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
@@ -104,7 +104,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                         X = x;
                         Y = y;
                         bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
-                        susednih_1 = 4;
+                        // susednih_1 = 4;
                         break;
                     }
                     else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
@@ -112,12 +112,12 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                         X = x;
                         Y = y;
                         bCvor_Susedni_stanje_2_Postoji = true;
-                        susednih_2 = 4;
+                        // susednih_2 = 4;
                         break;
                     }
                     else
                     {
-                        susednih_2--;
+                        // susednih_2--;
                         smer = (smer + 1) % 4;
                         // if (susednih_2 <= 0) bObilazak_Kraj = true;
                     }
