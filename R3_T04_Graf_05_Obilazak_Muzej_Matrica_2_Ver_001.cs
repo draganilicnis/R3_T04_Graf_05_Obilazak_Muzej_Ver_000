@@ -4,7 +4,7 @@ using System;
 
 class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
 {
-    static int[,] Graf_Predstavljanje_Matrica_A_Ini()
+    static int[,] Graf_Matrica_A_Ini()
     {
         int[,] A = new int[5, 5]
         {
@@ -16,7 +16,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
         };
         return A;
     }
-    static int[,] Graf_Predstavljanje_Matrica_B_Ini(int[,] A)
+    static int[,] Graf_Matrica_B_Ini(int[,] A)
     {
         int[,] B = new int[5, 5];
         for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) B[i, j] = (A[i, j] > 0) ? 1 : 0;
@@ -24,27 +24,41 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
     }
     static void Main()
     {
-        int[,] A = Graf_Predstavljanje_Matrica_A_Ini();
-        int[,] B = Graf_Predstavljanje_Matrica_B_Ini(A);
-        int X = 2;      // X start = 2
-        int Y = 2;      // Y start = 2
-        Graf_Obilazak_DFS_Matrica_Rucno_Ver_001(A, B, X, Y);
+        int[,] A = Graf_Matrica_A_Ini();
+        int[,] B = Graf_Matrica_B_Ini(A);
+        int X = 2;      // X start = 2 : Pocetna pozicija
+        int Y = 2;      // Y start = 2 : Pocetna pozicija
+        DFS_Matrica_Rucno_Ver_002(A, B, X, Y);
     }
-
-    static void Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_ulazna_obrada(int[,] A, int[,] G, int X, int Y, ref int brojac_cvorova_poseta_ulaz)
+    static void DFS_Matrica_Rucno_Ver_002(int[,] A, int[,] G, int X, int Y)
     {
-        Console.WriteLine(A[X, Y] + " " + brojac_cvorova_poseta_ulaz);
+        int smer = 0;
+        int brojac_posecenih_cvorova_ulaz = 0;          // Brojac cvorova koji su prvi put poseceni
+        int brojac_posecenih_cvorova_izlaz = 0;         // Brojac cvorova koji su poslednji put poseceni
+
+        bool bObilazak_Kraj = false;                    // Obilazak vise nije moguc
+        while (!bObilazak_Kraj)
+        {
+            if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Zapamti_da_si_ga_posetio(A, G, X, Y, ref brojac_posecenih_cvorova_ulaz);
+
+            bool bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen = DFS_Postoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, smer);
+            if (!bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen)
+            {
+                if (G[X, Y] == 2) DFS_Poseti_cvor_XY_i_Zapamti_da_si_ga_posetio(A, G, X, Y, ref brojac_posecenih_cvorova_izlaz, true);
+                bool bPostoji_Susedni_Cvor_stanje_2 = DFS_Postoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, smer, 2);
+                if (!bPostoji_Susedni_Cvor_stanje_2) bObilazak_Kraj = true;
+            }
+        }
+    }
+    static void DFS_Poseti_cvor_XY_i_Zapamti_da_si_ga_posetio(int[,] A, int[,] G, int X, int Y, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
+    {
+        string sKomentar_Povratak = (!bIzlazna_obrada) ? "" : " : Povratak";
+        Console.WriteLine(A[X, Y] + " " + brojac_posecenih_cvorova + " " + sKomentar_Povratak);
         G[X, Y]++;      // G[X, Y] = 1;
-        brojac_cvorova_poseta_ulaz++;
-    }
-    static void Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(int[,] A, int[,] G, int X, int Y, ref int brojac_cvorova_poseta_izlaz)
-    {
-        Console.WriteLine(A[X, Y] + " " + brojac_cvorova_poseta_izlaz + " : Povratak");
-        G[X, Y]++;      // G[X, Y] = 2;
-        brojac_cvorova_poseta_izlaz++;
+        brojac_posecenih_cvorova++;
     }
 
-    static bool bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref int X, ref int Y, int[,] G, int smer, int VREDNOST = 1)
+    static bool DFS_Postoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref int X, ref int Y, int[,] G, int smer, int VREDNOST = 1)
     {
         int N = G.GetLength(0);                         // Dimenzija matrice G: Broj redova
         int M = G.GetLength(1);                         // Dimenzija matrice G: Broj kolona
@@ -66,29 +80,6 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
             smer = (smer + 1) % 4;
         }
         return bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji;
-    }
-    static void Graf_Obilazak_DFS_Matrica_Rucno_Ver_001(int[,] A, int[,] G, int X, int Y)
-    {
-        int smer = 0;
-
-        int brojac_cvorova_poseta_ulaz = 0;             // Brojac cvorova koji su prvi put poseceni
-        int brojac_cvorova_poseta_izlaz = 0;            // Brojac cvorova koji su poslednji put poseceni
-
-        bool bObilazak_Kraj = false;                    // Obilazak vise nije moguc
-        while (!bObilazak_Kraj)
-        {
-            if (G[X, Y] == 1) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_ulazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_ulaz);
-
-            bool bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, smer);
-
-            if (!bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji)
-            {
-                if (G[X, Y] == 2) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
-                //bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, DX, DY, smer);
-                bool bCvor_Susedni_stanje_2_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, smer, 2); 
-                if (!bCvor_Susedni_stanje_2_Postoji) bObilazak_Kraj = true;
-            }
-        }
     }
 }
 
