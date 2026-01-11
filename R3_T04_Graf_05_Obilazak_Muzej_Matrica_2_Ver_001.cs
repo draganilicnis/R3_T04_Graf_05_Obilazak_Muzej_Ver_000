@@ -1,7 +1,6 @@
 // R3 T04 Graf 05 Obilazak: Primer: Muzej:  https://petlja.org/sr-Latn-RS/kurs/17918/4/5358#id11 Implicitna reperzentacija
 using System;
 // using System.Collections.Generic;
-// using System.Linq;
 
 class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
 {
@@ -75,31 +74,33 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                 susednih_nema_1++;
                 smer++;
                 smer = smer % 4;
-                if (susednih_nema_1 >= 4)
+            }
+
+            if (susednih_nema_1 >= 4)
+            {
+                if (G[X, Y] == 2) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
+                x = X + DX[smer];
+                y = Y + DY[smer];
+                if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
                 {
-                    if (G[X, Y] == 2) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
-                    x = X + DX[smer];
-                    y = Y + DY[smer];
-                    if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
-                    {
-                        X = x;
-                        Y = y;
-                        susednih_nema_1 = 0;
-                    }
-                    else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
-                    {
-                        X = x;
-                        Y = y;
-                        susednih_nema_2 = 0;
-                    }
-                    else
-                    {
-                        susednih_nema_2++;
-                        if (susednih_nema_2 >= 4) 
-                            bObilazak_Kraj = true;
-                    }
+                    X = x;
+                    Y = y;
+                    susednih_nema_1 = 0;
+                }
+                else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
+                {
+                    X = x;
+                    Y = y;
+                    susednih_nema_2 = 0;
+                }
+                else
+                {
+                    susednih_nema_2++;
+                    if (susednih_nema_2 >= 4)
+                        bObilazak_Kraj = true;
                 }
             }
+
         }
     }
 }
