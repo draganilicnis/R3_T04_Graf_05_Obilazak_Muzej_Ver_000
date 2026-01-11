@@ -65,21 +65,28 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                 // susednih_1 = 4;
                 // susednih_2 = 4;
             }
-            int x = X + DX[smer];
-            int y = Y + DY[smer];
-            if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
-            {
-                X = x;
-                Y = y;
-                susednih_1 = 4;
-            }
-            else
-            {
-                susednih_1--;
-                if (susednih_1 >= 0) smer = (smer + 1) % 4;
-            }
 
-            if (susednih_1 <= 0)
+            bool bCvor_Susedni_jos_uvek_nije_posecen_Postoji = false;
+            for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
+            {
+                int x = X + DX[smer];
+                int y = Y + DY[smer];
+                if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
+                {
+                    X = x;
+                    Y = y;
+                    bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
+                    susednih_1 = 4;
+                    break;
+                }
+                else
+                {
+                    //susednih_1--;
+                    //if (susednih_1 >= 0) 
+                        smer = (smer + 1) % 4;
+                }
+            }
+            if (!bCvor_Susedni_jos_uvek_nije_posecen_Postoji /*susednih_1 <= 0*/)
             {
                 if (G[X, Y] == 2)
                 {
@@ -87,26 +94,35 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                     susednih_1 = 4;
                     susednih_2 = 4;
                 }
-                x = X + DX[smer];
-                y = Y + DY[smer];
-                if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
+                bool bCvor_Susedni_stanje_2_Postoji = false;
+                for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
                 {
-                    X = x;
-                    Y = y;
-                    susednih_1 = 4;
+                    int x = X + DX[smer];
+                    int y = Y + DY[smer];
+                    if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
+                    {
+                        X = x;
+                        Y = y;
+                        bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
+                        susednih_1 = 4;
+                        break;
+                    }
+                    else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
+                    {
+                        X = x;
+                        Y = y;
+                        bCvor_Susedni_stanje_2_Postoji = true;
+                        susednih_2 = 4;
+                        break;
+                    }
+                    else
+                    {
+                        susednih_2--;
+                        smer = (smer + 1) % 4;
+                        // if (susednih_2 <= 0) bObilazak_Kraj = true;
+                    }
                 }
-                else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
-                {
-                    X = x;
-                    Y = y;
-                    susednih_2 = 4;
-                }
-                else
-                {
-                    susednih_2--;
-                    smer = (smer + 1) % 4;
-                    if (susednih_2 <= 0) bObilazak_Kraj = true;
-                }
+                if (!bCvor_Susedni_stanje_2_Postoji) bObilazak_Kraj = true;
             }
         }
     }
