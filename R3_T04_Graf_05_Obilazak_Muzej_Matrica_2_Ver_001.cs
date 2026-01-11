@@ -10,13 +10,13 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
         {
             { 11, 12, 13, 14, 15 },      // ABCDE
             { 21, -1, 23, -1, 25 },      // F G H
-            { -1, -1, 33, -1, -1 },      // X I Y
+            { 31, -1, 33, -1, 35 },      // X I Y
             { 41, -1, 43, -1, 45 },      // J K L
             { 51, 52, 53, 54, 55 }       // MNOPQ
         };
         return A;
     }
-    static int[,] Graf_Predstavljanje_Matrica_B_Ini(int [,] A)
+    static int[,] Graf_Predstavljanje_Matrica_B_Ini(int[,] A)
     {
         int[,] B = new int[5, 5];
         for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) B[i, j] = (A[i, j] > 0) ? 1 : 0;
@@ -39,7 +39,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
     }
     static void Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(int[,] A, int[,] G, int X, int Y, ref int brojac_cvorova_poseta_izlaz)
     {
-        Console.WriteLine(A[X, Y] + " " + brojac_cvorova_poseta_izlaz + " : Povratak" );
+        Console.WriteLine(A[X, Y] + " " + brojac_cvorova_poseta_izlaz + " : Povratak");
         G[X, Y]++;      // G[X, Y] = 2;
         brojac_cvorova_poseta_izlaz++;
     }
@@ -96,8 +96,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
                 else
                 {
                     susednih_nema_2++;
-                    if (susednih_nema_2 >= 4)
-                        bObilazak_Kraj = true;
+                    if (susednih_nema_2 >= 4) bObilazak_Kraj = true;
                 }
             }
 
