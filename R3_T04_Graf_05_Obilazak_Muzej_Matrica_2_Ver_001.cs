@@ -43,6 +43,27 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
         G[X, Y]++;      // G[X, Y] = 2;
         brojac_cvorova_poseta_izlaz++;
     }
+
+    static bool bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref int X, ref int Y, int[,] G, int[] DX, int[] DY, int smer, int VREDNOST = 1)
+    {
+        int N = G.GetLength(0);                         // Dimenzija matrice G: Broj redova
+        int M = G.GetLength(1);                         // Dimenzija matrice G: Broj kolona
+        bool bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = false;
+        for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
+        {
+            int x = X + DX[smer];
+            int y = Y + DY[smer];
+            if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == VREDNOST)
+            {
+                X = x;
+                Y = y;
+                bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = true;
+                break;
+            }
+            smer = (smer + 1) % 4;
+        }
+        return bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji;
+    }
     static void Graf_Obilazak_DFS_Matrica_Rucno_Ver_001(int[,] A, int[,] G, int X, int Y)
     {
         int N = A.GetLength(0);                         // Dimenzija matrice A: Broj redova
@@ -53,75 +74,40 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_001
 
         int brojac_cvorova_poseta_ulaz = 0;             // Brojac cvorova koji su prvi put poseceni
         int brojac_cvorova_poseta_izlaz = 0;            // Brojac cvorova koji su poslednji put poseceni
-        // int susednih_1 = 4;                             // Brojac mogucih susednih cvorova koji imaju 1
-        // int susednih_2 = 4;                             // Brojac mogucih susednih cvorova koji imaju 2
-        bool bObilazak_Kraj = false;                    // Obilazak vise nije moguc
 
+        bool bObilazak_Kraj = false;                    // Obilazak vise nije moguc
         while (!bObilazak_Kraj)
         {
-            if (G[X, Y] == 1)
-            {
-                Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_ulazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_ulaz);
-                // susednih_1 = 4;
-                // susednih_2 = 4;
-            }
+            if (G[X, Y] == 1) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_ulazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_ulaz);
 
-            bool bCvor_Susedni_jos_uvek_nije_posecen_Postoji = false;
-            for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
+            bool bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, DX, DY, smer);
+
+            if (!bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji)
             {
-                int x = X + DX[smer];
-                int y = Y + DY[smer];
-                if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
-                {
-                    X = x;
-                    Y = y;
-                    bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
-                    // susednih_1 = 4;
-                    break;
-                }
-                else
-                {
-                    //susednih_1--;
-                    //if (susednih_1 >= 0) 
-                        smer = (smer + 1) % 4;
-                }
-            }
-            if (!bCvor_Susedni_jos_uvek_nije_posecen_Postoji /*susednih_1 <= 0*/)
-            {
-                if (G[X, Y] == 2)
-                {
-                    Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
-                    // susednih_1 = 4;
-                    // susednih_2 = 4;
-                }
-                bool bCvor_Susedni_stanje_2_Postoji = false;
-                for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
-                {
-                    int x = X + DX[smer];
-                    int y = Y + DY[smer];
-                    if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
-                    {
-                        X = x;
-                        Y = y;
-                        bCvor_Susedni_jos_uvek_nije_posecen_Postoji = true;
-                        // susednih_1 = 4;
-                        break;
-                    }
-                    else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
-                    {
-                        X = x;
-                        Y = y;
-                        bCvor_Susedni_stanje_2_Postoji = true;
-                        // susednih_2 = 4;
-                        break;
-                    }
-                    else
-                    {
-                        // susednih_2--;
-                        smer = (smer + 1) % 4;
-                        // if (susednih_2 <= 0) bObilazak_Kraj = true;
-                    }
-                }
+                if (G[X, Y] == 2) Graf_Obilazak_DFS_Poseti_cvor_Zapamti_da_si_posetio_cvor_XY_izlazna_obrada(A, G, X, Y, ref brojac_cvorova_poseta_izlaz);
+                //bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, DX, DY, smer);
+                bool bCvor_Susedni_stanje_2_Postoji = bPostoji_Susedni_Cvor_koji_jos_uvek_nije_posecen(ref X, ref Y, G, DX, DY, smer, 2); 
+                //bool bCvor_Susedni_stanje_2_Postoji = false;
+                //for (int cvor_susedni = 0; cvor_susedni < 4; cvor_susedni++)
+                //{
+                //    int x = X + DX[smer];
+                //    int y = Y + DY[smer];
+                //    if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 1)
+                //    {
+                //        X = x;
+                //        Y = y;
+                //        bSusedni_Cvor_koji_jos_uvek_nije_posecen_Postoji = true;
+                //        break;
+                //    }
+                //    else if (x >= 0 && x < N && y >= 0 && y < M && G[x, y] == 2)
+                //    {
+                //        X = x;
+                //        Y = y;
+                //        bCvor_Susedni_stanje_2_Postoji = true;
+                //        break;
+                //    }
+                //    smer = (smer + 1) % 4;
+                //}
                 if (!bCvor_Susedni_stanje_2_Postoji) bObilazak_Kraj = true;
             }
         }
