@@ -3,7 +3,7 @@
 using System;
 // using System.Collections.Generic;
 
-class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekrzija
+class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
 {
     public static int[,] A = new int[,]     // Matrica (graf) ORIGINAL
     {
@@ -42,20 +42,22 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekrzija
         int brojac_posecenih_cvorova_ulaz = 0;          // Brojac cvorova koji su prvi put poseceni
         int brojac_posecenih_cvorova_izlaz = 0;         // Brojac cvorova koji su poslednji put poseceni
 
-        bool bObilazak_DFS_Moze = true;                 // Obilazak DFS je moguc
-        while (bObilazak_DFS_Moze)                      // Sve dok je DFS obilazak moguc
-        {
-            if (X == XX && Y == YY) bObilazak_DFS_Moze = false;     //  Ako smo stigli do ciljnog cvora XX YY
-            if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
+        if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
 
-            bool bCvor_susedni_koji_nije_posecen_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer);
-            if (!bCvor_susedni_koji_nije_posecen_Postoji)
-            {
-                if (G[X, Y] == 2) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_izlaz, true); // Cvor XY povratak
-                bool bCvor_susedni_Stanje_2_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2);
-                if (!bCvor_susedni_Stanje_2_Postoji) bObilazak_DFS_Moze = false;    // Ako ne postoji ni jedan od 4 moguca susedna cvora koji je dostupan i nije posecen, 
-            }                                                                       // onda je kraj
-        }
+        //bool bObilazak_DFS_Moze = true;                 // Obilazak DFS je moguc
+        //while (bObilazak_DFS_Moze)                      // Sve dok je DFS obilazak moguc
+        //{
+        //    if (X == XX && Y == YY) bObilazak_DFS_Moze = false;     //  Ako smo stigli do ciljnog cvora XX YY
+        //    if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
+
+        //    bool bCvor_susedni_koji_nije_posecen_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer);
+        //    if (!bCvor_susedni_koji_nije_posecen_Postoji)
+        //    {
+        //        if (G[X, Y] == 2) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_izlaz, true); // Cvor XY povratak
+        //        bool bCvor_susedni_Stanje_2_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2);
+        //        if (!bCvor_susedni_Stanje_2_Postoji) bObilazak_DFS_Moze = false;    // Ako ne postoji ni jedan od 4 moguca susedna cvora koji je dostupan i nije posecen, 
+        //    }                                                                       // onda je kraj
+        //}
     }
     static void DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(int X, int Y, int[,] G, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
     {
