@@ -13,8 +13,15 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_002
             { 41, -1, 43, -1, 45 },         // J K L    { 41, -1, 43, -1, 45 },
             { 51, 52, 53, 54, 55 }          // MNOPQ    { 51, 52, 53, 54, 55 }
     };
-    public static int Start_X = 2;          // X start = 2 : Pocetna pozicija, odnosno X koordinata pocetnog cvora
-    public static int Start_Y = 2;          // Y start = 2 : Pocetna pozicija, odnosno Y koordinata pocetnog cvora
+   
+    public static int Start_X = 2;          // X start =  2 : Pocetna pozicija, odnosno X koordinata pocetnog cvora
+    public static int Start_Y = 2;          // Y start =  2 : Pocetna pozicija, odnosno Y koordinata pocetnog cvora
+    public static int Stop_X = -1;          // X stop  = -1 : Krajnja pozicija, odnosno X koordinata ciljnog cvora (za npr lavirint), ako je -1 nema ciljnog cvora
+    public static int Stop_Y = -1;          // Y stop  = -1 : Krajnja pozicija, odnosno Y koordinata ciljnog cvora (za npr lavirint), ako je -1 nema ciljnog cvora
+
+    public static bool bSmer_Reset = false; // Ako je bSmer_Reset, onda svaki put smer krece od 0, pre petlje do 3 u petlji, u suprotnom nastavlja sa istim poslednjim smerom
+    
+    // Sve gore navedene globalne promenljive matrica A, StartXY i StopXY se mogu uobicajeno ucitavati sa tastature
     static int[,] Graf_Matrica_G_Ini(int[,] A)  // Matrica pomocna (graf) za obelezavanje posecenih cvorova (0: prepreka, 1: neposecen cvor, 2: posecen prvi put, 3: povratak
     {
         int N = A.GetLength(0);                 // Dimenzija matrice A: Broj redova
@@ -25,31 +32,32 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_002
     }
     static void Main()
     {
-        int[,] G = Graf_Matrica_G_Ini(A);                                   // Matrica (graf) pomocna obelezavanje posecenih cvorova
-        Graf_Obilazak_DFS_Matrica_Rucno_Ver_002(Start_X, Start_Y, G, A);    // Obilazak DFS matrice iterativno (rucno) bez rekurzije i steka
+        int[,] G = Graf_Matrica_G_Ini(A);                                               // G Matrica (graf) pomocna za obelezavanje posecenih cvorova
+        Graf_Obilazak_DFS_Matrica_Rucno_Ver_002(Start_X, Start_Y, G, Stop_X, Stop_Y);   // Obilazak DFS matrice iterativno (rucno) bez rekurzije i steka
     }
 
-    static void Graf_Obilazak_DFS_Matrica_Rucno_Ver_002(int X, int Y, int[,] G, int[,] A)
+    static void Graf_Obilazak_DFS_Matrica_Rucno_Ver_002(int X, int Y, int[,] G, int XX = -1, int YY = -1)
     {
         int smer = 0;
         int brojac_posecenih_cvorova_ulaz = 0;          // Brojac cvorova koji su prvi put poseceni
         int brojac_posecenih_cvorova_izlaz = 0;         // Brojac cvorova koji su poslednji put poseceni
 
-        bool bObilazak_DFS_Kraj = false;                // Obilazak DFS vise nije moguc
-        while (!bObilazak_DFS_Kraj)
+        bool bObilazak_DFS_Moze = true;                 // Obilazak DFS je moguc
+        while (bObilazak_DFS_Moze)                      // Sve dok je DFS obilazak moguc
         {
-            if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, A, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
+            if (X == XX && Y == YY) bObilazak_DFS_Moze = false;     //  Ako smo stigli do ciljnog cvora XX YY
+            if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
 
             bool bCvor_susedni_koji_nije_posecen_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer);
             if (!bCvor_susedni_koji_nije_posecen_Postoji)
             {
-                if (G[X, Y] == 2) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, A, ref brojac_posecenih_cvorova_izlaz, true); // Cvor XY povratak
+                if (G[X, Y] == 2) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova_izlaz, true); // Cvor XY povratak
                 bool bCvor_susedni_Stanje_2_Postoji = DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2);
-                if (!bCvor_susedni_Stanje_2_Postoji) bObilazak_DFS_Kraj = true; // Ako ne postoji ni jedan od 4 moguca susedna cvora koji je dostupan i nije posecen, 
-            }                                                                   // onda je kraj
+                if (!bCvor_susedni_Stanje_2_Postoji) bObilazak_DFS_Moze = false;    // Ako ne postoji ni jedan od 4 moguca susedna cvora koji je dostupan i nije posecen, 
+            }                                                                       // onda je kraj
         }
     }
-    static void DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(int X, int Y, int[,] G, int[,] A, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
+    static void DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(int X, int Y, int[,] G, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
     {
         string sKomentar_Povratak = (bIzlazna_obrada) ? " : Povratak" : "";
         Console.WriteLine(A[X, Y] + " " + brojac_posecenih_cvorova + "" + sKomentar_Povratak);
@@ -63,7 +71,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_2_Ver_002
         int M = G.GetLength(1);                     // Dimenzija matrice A: Broj kolona
         return x >= 0 && x < N && y >= 0 && y < M;  // Ova metoda moze da se izostavi ukoliko se matrici G doda okvir u odnosu na original A (N+2, M+2)
     }
-    static bool DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref int X, ref int Y, int[,] G, int smer, int STANJE = 1, bool bSmer_Reset = false)
+    static bool DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref int X, ref int Y, int[,] G, int smer, int STANJE = 1)
     {
         int Smer_Mx = 4;                            // Ukupan broj smerova
         int[] DX = new int[] { -1, +0, +1, +0 };    // S Z J I  // TLBR: Gore, Levo, Dole, Desno    // Pomeraji (susedni) po X (red:    gore, isti, dole, isti )
