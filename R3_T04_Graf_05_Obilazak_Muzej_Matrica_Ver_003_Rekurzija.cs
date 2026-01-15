@@ -9,13 +9,13 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
     {
             { 11, 12, 13, 14, 15 },         // ABCDE    { 11, 12, 13, 14, 15 },         
             { 21, -1, 23, -1, 25 },         // F G H    { 21, -1, 23, -1, 25 },
-            { -1, -1, 33, -1, -1 },         // X I Y    { 31, -1, 33, -1, 35 },
+            { 31, -1, 33, -1, -1 },         // X I Y    { 31, -1, 33, -1, 35 },
             { 41, -1, 43, -1, 45 },         // J K L    { 41, -1, 43, -1, 45 },
             { 51, 52, 53, 54, 55 }          // MNOPQ    { 51, 52, 53, 54, 55 }
     };
 
-    public static int Start_X = 2;          // X start =  2 : Pocetna pozicija, odnosno X koordinata pocetnog cvora
-    public static int Start_Y = 2;          // Y start =  2 : Pocetna pozicija, odnosno Y koordinata pocetnog cvora
+    public static int Start_X = 0;          // X start =  2 : Pocetna pozicija, odnosno X koordinata pocetnog cvora
+    public static int Start_Y = 0;          // Y start =  2 : Pocetna pozicija, odnosno Y koordinata pocetnog cvora
     public static int Stop_X = -1;          // X stop  = -1 : Krajnja pozicija, odnosno X koordinata ciljnog cvora (za npr lavirint), ako je -1 nema ciljnog cvora
     public static int Stop_Y = -1;          // Y stop  = -1 : Krajnja pozicija, odnosno Y koordinata ciljnog cvora (za npr lavirint), ako je -1 nema ciljnog cvora
 
@@ -38,7 +38,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
 
     static void Graf_Obilazak_DFS_Matrica_Rekurzija_Ver_003(int X, int Y, int[,] G, int XX = -1, int YY = -1)
     {
-        int smer = 0;
+        // int smer = 0;
         int brojac_posecenih_cvorova_ulaz = 0;          // Brojac cvorova koji su prvi put poseceni
         int brojac_posecenih_cvorova_izlaz = 0;         // Brojac cvorova koji su poslednji put poseceni
 
@@ -94,8 +94,9 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
         // Korak 6: Izvrsi izlaznu obradu cvora C
         K1_DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova, true);
         // DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova, true);
-        if (DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2))
-            DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova, true);
+        //if (DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2))
+          //  K1_DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova, true);
+        //DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova, true);
     }
 
     static bool DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref int X, ref int Y, int[,] G, int smer, int STANJE = 1)
