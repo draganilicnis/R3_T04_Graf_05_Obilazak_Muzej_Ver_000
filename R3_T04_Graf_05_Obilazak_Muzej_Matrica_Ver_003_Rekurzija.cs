@@ -32,7 +32,7 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
     }
     static void Main()
     {
-        int[,] G = Graf_Matrica_G_Ini(A);                                               // G Matrica (graf) pomocna za obelezavanje posecenih cvorova
+        int[,] G = Graf_Matrica_G_Ini(A);                                                   // G Matrica (graf) pomocna za obelezavanje posecenih cvorova
         Graf_Obilazak_DFS_Matrica_Rekurzija_Ver_003(Start_X, Start_Y, G, Stop_X, Stop_Y);   // Obilazak DFS matrice iterativno (rucno) bez rekurzije i steka
     }
 
@@ -42,7 +42,8 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
         int brojac_posecenih_cvorova_ulaz = 0;          // Brojac cvorova koji su prvi put poseceni
         int brojac_posecenih_cvorova_izlaz = 0;         // Brojac cvorova koji su poslednji put poseceni
 
-        if (G[X, Y] == 1) DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
+        if (G[X, Y] == 1) 
+            DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova_ulaz);            // Cvor XY nije posecen
 
         //bool bObilazak_DFS_Moze = true;                 // Obilazak DFS je moguc
         //while (bObilazak_DFS_Moze)                      // Sve dok je DFS obilazak moguc
@@ -59,23 +60,40 @@ class R3_T04_Graf_05_Obilazak_Muzej_Matrica_Ver_003_Rekurzija
         //    }                                                                       // onda je kraj
         //}
     }
+
+    static void K1_DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(int X, int Y, int[,] G, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
+    {
+        // Korak 1: Zapamti da si posetio cvor C
+        string sKomentar_Povratak = (bIzlazna_obrada) ? " : Povratak" : "";
+        Console.WriteLine(A[X, Y] + " " + brojac_posecenih_cvorova + "" + sKomentar_Povratak);
+
+        // Korak 2: Izvrsi ulaznu obradu cvora C
+        G[X, Y]++;      // G[X, Y] = 2; odnosno G[X, Y] = 3; --> ovim obelazavamo (zapisujemo) da je cvor XY posecen
+        brojac_posecenih_cvorova++;     // u zavisnosti od konkretnog zadatka (npr. da li se trazi udaljenost cvorova i sl) ova promenljiva ce se drugacije obradjivati 
+    }
     static void DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(int X, int Y, int[,] G, ref int brojac_posecenih_cvorova, bool bIzlazna_obrada = false)
     {
         // Korak 1: Zapamti da si posetio cvor C
+        //string sKomentar_Povratak = (bIzlazna_obrada) ? " : Povratak" : "";
+        //Console.WriteLine(A[X, Y] + " " + brojac_posecenih_cvorova + "" + sKomentar_Povratak);
+
         // Korak 2: Izvrsi ulaznu obradu cvora C
-        string sKomentar_Povratak = (bIzlazna_obrada) ? " : Povratak" : "";
-        Console.WriteLine(A[X, Y] + " " + brojac_posecenih_cvorova + "" + sKomentar_Povratak);
-        G[X, Y]++;      // G[X, Y] = 2; odnosno G[X, Y] = 3; --> ovim obelazavamo (zapisujemo) da je cvor XY posecen
-        brojac_posecenih_cvorova++;     // u zavisnosti od konkretnog zadatka (npr. da li se trazi udaljenost cvorova i sl) ova promenljiva ce se drugacije obradjivati 
+        //G[X, Y]++;      // G[X, Y] = 2; odnosno G[X, Y] = 3; --> ovim obelazavamo (zapisujemo) da je cvor XY posecen
+        //brojac_posecenih_cvorova++;     // u zavisnosti od konkretnog zadatka (npr. da li se trazi udaljenost cvorova i sl) ova promenljiva ce se drugacije obradjivati 
+
+        K1_DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova);
 
         // Korak 3: Za svaki cvor c' koji je susedan cvoru C
         int smer = 0;
+
         // Korak 4:     Ako cvor c' nije posecen
         if (DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer))
             // Korak 5:         Poseti cvor c'
             DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova);
 
         // Korak 6: Izvrsi izlaznu obradu cvora C
+        K1_DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen(X, Y, G, ref brojac_posecenih_cvorova, true);
+        // DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova, true);
         if (DFS_Cvor_XY_Susedni_nije_posecen_Postoji(ref X, ref Y, G, smer, 2))
             DFS_Poseti_cvor_XY_i_Obelezi_da_je_posecen_Rekurzija(X, Y, G, ref brojac_posecenih_cvorova, true);
     }
