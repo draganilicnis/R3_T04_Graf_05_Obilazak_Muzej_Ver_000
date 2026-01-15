@@ -49,18 +49,18 @@ class R3_T04_Graf_05_Obilazak_Muzej_Lista_Ver_000
             new List<int>{ 54, 45 },        // 55
         };
 
-        //DFS(0, G);
+        DFS(0, G);
         Console.WriteLine("K");
     }
 
-    static void DFS(int cvor, List<List<int>> susedi)
+    static void DFS(int cvor, List<int>[] susedi)
     {
-        int n = susedi.Count;
+        int n = susedi.Length;
         bool[] posecen = new bool[n];
         // return 
             DFS(cvor, susedi, posecen);
     }
-    static void DFS(int cvor, List<List<int>> susedi, bool[] posecen)
+    static void DFS(int cvor, List<int>[] susedi, bool[] posecen)
     {
         Console.WriteLine("Poseta cvoru {0}", cvor);
         posecen[cvor] = true;
